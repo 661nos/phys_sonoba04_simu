@@ -11,19 +11,22 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
+#thetaに関するlistを返す。theta1からtheta2までを等間隔に分けたものを折り返し、それをnT回繰り返す。
 def th(theta1,theta2,dt,nT):
   dth=(theta2-theta1)*dt
   ret=[]
   for i in range(int((theta2-theta1)/dth)):
     ret.append(theta1+i*dth)
-  for i in range(int((theta2-theta1)//dth)):
+  for i in range(int((theta2-theta1)/dth)):
     ret.append(theta2-i*dth)
   ret*=nT
   return ret
 
+#thetaに対応するphiの変化率を返す。
 def dotphi(A,B,theta):
   return (A-B*np.cos(theta))/(np.sin(theta))**2
 
+#phiの各theta時での変位のリストを返す。最初は0。
 def phi(A,B,theta1,theta2,dt,nT):
   dp=list(map(lambda x:dotphi(A,B,x),th(theta1,theta2,dt,nT)))
   p=[]
@@ -33,6 +36,7 @@ def phi(A,B,theta1,theta2,dt,nT):
     p.append(p[i]+dp[i]*dt)
   return p
 
+#上記の関数らを用いて値を計算し描画する。A,Bは運動の積分、Tはthetaの等分数、nTは繰り返し回数。
 def calc_graph(A,B,theta1,theta2,T,nT):
   dt=1/T
   theta=th(theta1,theta2,dt,nT)
@@ -47,4 +51,4 @@ def calc_graph(A,B,theta1,theta2,T,nT):
   print(len(theta))
   plt.show()
 
-calc_graph(2,-3,np.pi/3,np.pi*6/7,1000,3)
+calc_graph(A=2,B=-3,theta1=np.pi/3,theta2=np.pi*6/7,T=1000,nT=3)
